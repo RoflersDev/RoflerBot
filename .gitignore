@@ -1,0 +1,6 @@
+
+node_modules/
+start.bat
+.env
+scripts/deleteCmd.js
+deploy.js
