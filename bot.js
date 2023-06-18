@@ -1,11 +1,20 @@
 const fs = require('node:fs');
 const path = require('node:path');
+const mongose = require('mongoose');
 require('dotenv').config();
 const token = process.env.TOKEN;
 
-const { Client, Collection, Events, GatewayIntentBits, ActivityType } = require('discord.js');
+const { Client, Collection, Events, GatewayIntentBits, ActivityType, Message } = require('discord.js');
 
-const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates, GatewayIntentBits.GuildMembers] });
+const update = require('./update');
+
+const client = new Client({ intents: 
+	[
+		GatewayIntentBits.Guilds, 
+		GatewayIntentBits.GuildVoiceStates,
+		GatewayIntentBits.GuildMembers, 
+		GatewayIntentBits.GuildMessages,
+	]});
 
 client.commands = new Collection();
 
@@ -49,6 +58,8 @@ client.once(Events.ClientReady, c => {
 
 	client.user.setPresence({ status: 'dnd' });
 	client.user.setActivity('bebra | /kostik', { type: ActivityType.Listening });
+
+	mongose.connect(process.env.MONGO_URI);
 
 });
 

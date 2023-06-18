@@ -3,7 +3,7 @@ const { SlashCommandBuilder} = require('discord.js');
 module.exports = {
 	data: new SlashCommandBuilder()
 	.setName('upom')
-	.setDescription('upom command.')
+	.setDescription('mention user 10 times')
 	.addUserOption(option => 
 		option.setName('user')
 			.setDescription('Имя пользователя')
