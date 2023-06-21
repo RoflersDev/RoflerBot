@@ -1,6 +1,6 @@
 const fs = require('node:fs');
 const path = require('node:path');
-const mongose = require('mongoose');
+const mongoose = require('mongoose');
 require('dotenv').config();
 const token = process.env.TOKEN;
 
@@ -59,7 +59,7 @@ client.once(Events.ClientReady, c => {
 	client.user.setPresence({ status: 'dnd' });
 	client.user.setActivity('bebra | /kostik', { type: ActivityType.Listening });
 
-	mongose.connect(process.env.MONGO_URI);
+	mongoose.connect(process.env.MONGO_URI);
 
 });
 

@@ -11,7 +11,7 @@ module.exports = {
 	    const coinsData = await coins.findOne({ _id: memberId });
         console.log(coinsData.coinsCount);
 
-        await interaction.reply(`You have ${Math.round(coinsData.coinsCount)} coins and ${coinsData.buildingsCount} builds. Sosi`);
+        await interaction.reply(`Hello ${coinsData.username}! You have ${Math.round(coinsData.coinsCount)} coins and ${coinsData.buildingsCount} builds.`);
 
 	},
 };``

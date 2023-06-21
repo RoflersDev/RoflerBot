@@ -1,7 +1,7 @@
 const coins = require('./schema');
 
 const formula = (builds, coins) => {
-    let exit = coins + (coins * builds / 100);
+    let exit = coins + (coins * builds / 100) + 1;
     return exit;
 }
 async function update(){

@@ -22,15 +22,13 @@ module.exports = {
 
 			const coinsData = await coins.findOne({ _id: memberId });
 			if (coinsData.coinsCount < sum) {
-				await interaction.reply(`u need ${sum - coinsData.coinsCount} more `);
+				await interaction.reply(`u need ${Math.round(sum - coinsData.coinsCount)} more `);
 			}
 			else { 
 				const getData = await coins.findOneAndUpdate({
 					_id: memberId,
 				},
 				{
-					_id: memberId,
-					username: interaction.member.nickname,
 					$inc: {
                         buildingsCount: +counts,
                         coinsCount: -sum,

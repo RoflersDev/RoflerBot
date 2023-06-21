@@ -5,16 +5,12 @@ const coins = require('../schema');
 
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName('create')
-		.setDescription('create a new acc'),
+		.setName('update')
+		.setDescription('update'),
 	async execute(interaction) {
 		try {
 			const memberId = interaction.member.id;
 			const coinsData = await coins.findOne({ _id: memberId });
-			if (coinsData) {
-				await interaction.reply(`u already created account`);
-			}
-			else { 
 				await coins.findOneAndUpdate({
 					_id: interaction.member.id,
 				},
@@ -27,7 +23,6 @@ module.exports = {
 				})
 				await interaction.reply(`done`);
 			}
-		}
 		catch (err) { 
 			interaction.reply(err.message);
 		}
