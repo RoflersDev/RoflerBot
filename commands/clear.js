@@ -1,4 +1,4 @@
-const { SlashCommandBuilder} = require('discord.js');
+const { SlashCommandBuilder, PermissionFlagsBits} = require('discord.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -9,7 +9,8 @@ module.exports = {
 			.setDescription('counts msgs')
 			.setRequired(true)
             .setMaxValue(25)
-			),
+			)
+            .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers),
 	async execute(interaction) {
 		const counts = interaction.options.getInteger('counts');
         const fetchedMessages = await interaction.channel.messages.fetch({ limit: counts });

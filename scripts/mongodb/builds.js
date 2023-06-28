@@ -5,20 +5,15 @@ const schema = new Schema({
 		type: Number,
 		required: true,
 	},
-    username: {
+    build: {
         type: String,
         required: true,
     },
-	coinsCount: {
+	price: {
 		type: Number,
 		required: true,
 		default: 150,
 	},
-	buildingsCount: { 
-		type: Number,
-		required: true,
-		default: 0,
-	},
 })
-const name = "coinsCountB"
+const name = "builds"
 module.exports = models[name] || model(name, schema);

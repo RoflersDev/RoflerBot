@@ -1,7 +1,11 @@
 const { SlashCommandBuilder } = require('discord.js');
 
-const coins = require('../schema');
+const coins = require('../scripts/mongodb/coins');
 
+const buildings = {
+	subnway: 0,
+	doda: 0
+};
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -21,6 +25,7 @@ module.exports = {
 				{
 					_id: interaction.member.id,
 					username: interaction.member.displayName,
+					buildingsCount: buildings
 				},
 				{
 					upsert: true,

@@ -4,9 +4,10 @@ const mongoose = require('mongoose');
 require('dotenv').config();
 const token = process.env.TOKEN;
 
+
 const { Client, Collection, Events, GatewayIntentBits, ActivityType, Message } = require('discord.js');
 
-const update = require('./update');
+// const update = require('./update');
 
 const client = new Client({ intents: 
 	[
@@ -53,13 +54,35 @@ client.on(Events.InteractionCreate, async interaction => {
 		}
 	}
 });
+
+const close = () => { 
+	mongoose.disconnect()
+	.then(() => {
+	  console.log('Соединение закрыто успешно');
+	})
+	.catch((err) => {
+	  console.error('Ошибка при разрыве соединения:', err);
+	});
+}
+const open = () => {
+	mongoose.connect(process.env.MONGO_URI)
+	.then(() => {
+	  console.log('Подключено');
+	})
+	.catch((err) => {
+	  console.error('Ошибка при подключении соединения:', err);
+	});
+}
+
 client.once(Events.ClientReady, c => {
 	console.log(`Ready! Logged in as ${c.user.tag}`);
 
 	client.user.setPresence({ status: 'dnd' });
 	client.user.setActivity('bebra | /kostik', { type: ActivityType.Listening });
 
-	mongoose.connect(process.env.MONGO_URI);
+	close();
+	open();
+	
 
 });
 
