@@ -1,11 +1,7 @@
 const { SlashCommandBuilder } = require('discord.js');
-
 const coins = require('../scripts/mongodb/coins');
-
-const buildings = {
-	subnway: 0,
-	doda: 0
-};
+const servers = [];
+const userDataObj = {}
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -14,18 +10,35 @@ module.exports = {
 	async execute(interaction) {
 		try {
 			const memberId = interaction.member.id;
-			const coinsData = await coins.findOne({ _id: memberId });
-			if (coinsData) {
+
+			const guildId = interaction.member.guild.id;
+			const userData = await coins.findOne({_id: memberId, servers: guildId});
+			console.log(userData)
+			if (userData) {
 				await interaction.reply(`u already created account`);
 			}
 			else { 
+				servers.push(guildId);
+				const data = {
+					coins: 150,
+					builds: {
+						subnway: 1,
+						doda: 1,
+					},
+					timings: {
+						last: interaction.createdTimestamp,
+						ready: false
+					}
+				}
+				userDataObj[guildId] = data;
 				await coins.findOneAndUpdate({
-					_id: interaction.member.id,
+					_id: memberId,
 				},
 				{
-					_id: interaction.member.id,
-					username: interaction.member.displayName,
-					buildingsCount: buildings
+					_id: memberId,
+					username: interaction.user.tag,
+					servers: servers,
+					stats: userDataObj,
 				},
 				{
 					upsert: true,
@@ -34,7 +47,7 @@ module.exports = {
 			}
 		}
 		catch (err) { 
-			interaction.reply(err.message);
+			console.log(err.message);
 		}
 	},
 };``

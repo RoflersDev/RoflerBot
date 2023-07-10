@@ -8,18 +8,23 @@ module.exports = {
 		.setName('delete')
 		.setDescription('just delete u'),
 	async execute(interaction) {
-		try {
-				await coins.findOneAndDelete({
-					_id: interaction.member.id,
-				},
-				{
-					_id: interaction.member.id,
-					username: interaction.member.displayName,
-				},
-				{
-					upsert: true,
-				})
-				await interaction.reply(`done`);
+		try {			
+			const memberId = interaction.member.id;
+
+			const guildId = interaction.member.guild.id;
+			const userData = await coins.findOne({_id: memberId, servers: guildId});
+			
+			await coins.findOneAndDelete({
+				_id: interaction.member.id,
+				servers: guildId
+			},
+			{
+				_id: interaction.member.id,
+			},
+			{
+				upsert: true,
+			})
+			await interaction.reply(`done`);
 		}
 		catch (err) { 
 			interaction.reply(err.message);
