@@ -78,7 +78,7 @@ client.once(Events.ClientReady, c => {
 	console.log(`Ready! Logged in as ${c.user.tag}`);
 
 	client.user.setPresence({ status: 'dnd' });
-	client.user.setActivity('ватафак мазафака', { type: ActivityType.Listening });
+	client.user.setActivity('/help | https://vvl1m.github.io/', { type: ActivityType.Listening });
 
 	close();
 	open();
