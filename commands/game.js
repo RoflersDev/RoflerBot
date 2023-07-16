@@ -1,8 +1,13 @@
 const { SlashCommandBuilder } = require('discord.js');
 const coins = require('../scripts/mongodb/coins');
+
 const servers = [];
 const userDataObj = {}
-
+const achievements = {
+	test: false,
+	money: false,
+	builds: false
+}
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('create')
@@ -12,6 +17,7 @@ module.exports = {
 			const memberId = interaction.member.id;
 
 			const guildId = interaction.member.guild.id;
+			// const coinsData = await coins.findOne({ _id: memberId });
 			const userData = await coins.findOne({_id: memberId, servers: guildId});
 			console.log(userData)
 			if (userData) {
@@ -22,13 +28,14 @@ module.exports = {
 				const data = {
 					coins: 150,
 					builds: {
-						subnway: 1,
-						doda: 1,
+						subnway: 0,
+						doda: 0,
 					},
 					timings: {
 						last: interaction.createdTimestamp,
 						ready: false
-					}
+					},
+					achievements: achievements
 				}
 				userDataObj[guildId] = data;
 				await coins.findOneAndUpdate({
@@ -45,9 +52,10 @@ module.exports = {
 				})
 				await interaction.reply(`done`);
 			}
+
 		}
 		catch (err) { 
 			console.log(err.message);
 		}
 	},
-};``
+};

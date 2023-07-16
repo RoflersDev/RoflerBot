@@ -13,7 +13,7 @@ module.exports = {
 
 			const guildId = interaction.member.guild.id;
 			const userData = await coins.findOne({_id: memberId, servers: guildId});
-			
+
 			await coins.findOneAndDelete({
 				_id: interaction.member.id,
 				servers: guildId
@@ -27,7 +27,7 @@ module.exports = {
 			await interaction.reply(`done`);
 		}
 		catch (err) { 
-			interaction.reply(err.message);
+			console.log(err.message);
 		}
 	},
 };``

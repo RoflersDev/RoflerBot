@@ -30,7 +30,7 @@ module.exports = {
               },
               "author": {
                 "name": `Hello ${interaction.member.displayName}!`,
-                "url": `https://discord.gg/8Y2dkfFV`,
+                "url": `https://discord.gg/3hBfxmfJz5`,
                 "icon_url": `https://i.ibb.co/s9sBHkH/1girl-close-face-to-viewer-peace-sign-blue-hat-b-2062307604-e-IIb8-Cz3-Ioe-D-sd-counterfeit-2-5-drea.png`
               },
               "footer": {
