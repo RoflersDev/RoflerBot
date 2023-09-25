@@ -1,6 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
 
-const coins = require('../scripts/mongodb/coins');
 
 
 module.exports = {

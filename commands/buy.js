@@ -1,6 +1,9 @@
 const { SlashCommandBuilder } = require('discord.js');
-const coins = require('../scripts/mongodb/coins');
-const buildsSchem = require('../scripts/mongodb/builds');
+require('dotenv').config();
+const {createClient} = require('@supabase/supabase-js');
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_KEY;
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -28,8 +31,14 @@ module.exports = {
 		try {
 			const build = interaction.options.getString('build');
             const counts = interaction.options.getInteger('counts');
-			const userData = await coins.findOne({_id: memberId});
-			const dataBuilds = await buildsSchem.findOne({ build: build});
+			const {data:userData, error} = await supabase
+				.from('users')
+				.select('*')
+				.eq('id', memberId)
+				.single();
+			console.log(userData)
+			const {data: dataBuilds, error: errorBuilds} = await supabase.from('builds').select('*').eq('name', build).single();
+			console.log(dataBuilds.price)
 			const builds = {
 				subnway: await userData.stats[guildId].builds.subnway,
 				doda: await userData.stats[guildId].builds.doda,
@@ -44,8 +53,11 @@ module.exports = {
 			else {
 				userData.stats[guildId].coins -= sum;
 				userData.stats[guildId].builds[build] += counts;
-				userData.markModified(`stats`);
-				userData.save();
+
+				const { data: updatedUserData, error: updateError } = await supabase
+					.from('users')
+					.update(userData)
+					.eq('id', memberId)
 				console.log(userData.stats[guildId])
 				await interaction.reply(`purchased ${counts} ${build}'s. now u have ${userData.stats[guildId].builds.subnway} subnway's and ${userData.stats[guildId].builds.doda} doda's. Spended ${sum}.\nBalance: ${userData.stats[guildId].coins}`);
 			}

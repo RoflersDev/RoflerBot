@@ -1,7 +1,12 @@
 const { SlashCommandBuilder } = require('discord.js');
-const coins = require('../scripts/mongodb/coins');
-const achievementsData = require('../scripts/mongodb/achievements');
+require('dotenv').config();
+const {createClient} = require('@supabase/supabase-js');
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_KEY;
+const supabase = createClient(supabaseUrl, supabaseKey);
 const translate = require('./translate/balance.json');
+
+const achievSt = null;
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -11,41 +16,52 @@ module.exports = {
 		const memberId = interaction.member.id;
 		const guildId = interaction.member.guild.id;
 		try {
-			const userData = await coins.findOne({_id: memberId, servers: guildId})
-			const achievements = userData.stats[guildId].achievements
+			// const userData = await coins.findOne({_id: memberId, servers: guildId})
 
-			const achievementsList = await achievementsData.find();
+
+			const { data, error } = await supabase
+				.from('users')
+				.select('*')
+				.eq('id', memberId)
+				.single()
+			console.log(data)
+			const achievementsUser = data.stats[guildId].achievements
+			const {data:achievementsList, err} = await supabase
+				.from('achievements')
+				.select('*')
+			
 			let achievSt = ""
 
 			achievementsList.forEach(element => {
-				if (achievements[element.tag] == true) {
-					achievSt += element.name[interaction.locale] + " - " + element.description[interaction.locale] + "\n"
+				if (achievementsUser[element.tag] == true) {
+					achievSt += element.name + " - " + element.description + "\n"
 				}
 			});
-
-			if (userData) {
-				const countsSub = userData.stats[guildId].builds.subnway;
-				const countsDoda = userData.stats[guildId].builds.doda;
+			
+			console.log(achievementsUser)
+			if (data !== "") {
+				const countsSub = data.stats[guildId].builds.subnway;
+				const countsDoda = data.stats[guildId].builds.doda;
 				const coinsU = ((countsSub * 50) + (countsDoda * 100));
 				let string = ``
-				const waitingTime = Math.round((3600000 - (new Date().getTime() - userData.stats[guildId].timings.last)) / (1000 * 60));
+				const waitingTime = Math.round((3600000 - (new Date().getTime() - data.stats[guildId].timings.last)) / (1000 * 60));
 				
 				const embed = {
 					"title": translate.title[interaction.locale] ?? `Your stats`,
-					"description": `${userData.stats[guildId].coins} coins`,
+					"description": `${data.stats[guildId].coins} coins`,
 					"color": 0xff7b00,
 					"fields": [
 						{
 						  "name": `Buldings`,
-						  "value": string = (waitingTime > 0) ? `- ${countsSub} subnways\n- ${countsDoda} dodas\n - You need wait ${Math.round((3600000 - (new Date().getTime() - userData.stats[guildId].timings.last)) / (1000 * 60))} minutes to recieve your ${coinsU} coins` : `- ${countsSub} subnways\n- ${countsDoda} dodas\n - You can recieve your ${coinsU} coins`
+						  "value": string = (waitingTime > 0) ? `- ${countsSub} subnways\n- ${countsDoda} dodas\n - You need wait ${Math.round((3600000 - (new Date().getTime() - data.stats[guildId].timings.last)) / (1000 * 60))} minutes to recieve your ${coinsU} coins` : `- ${countsSub} subnways\n- ${countsDoda} dodas\n - You can recieve your ${coinsU} coins`
 						},
 						{
 							"name": `Achievements`,
-							"value": achievSt || "You dont have any"
+							"value": achievSt || "You dont have any" 
 						}
 					  ],
 					"thumbnail": {
-						"url": interaction.member.avatarURL({ format: 'png', dynamic: true, size: 1024 }) || interaction.user.avatarURL({ format: 'png', dynamic: true, size: 1024 }),
+						"url": interaction.member.avatarURL({ format: 'png', dynamic: true, size: 2048 }) || interaction.user.avatarURL({ format: 'png', dynamic: true, size: 2048 }),
 						"height": 0,
 						"width": 0
 					  },

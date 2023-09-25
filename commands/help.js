@@ -21,6 +21,10 @@ module.exports = {
                   "name": `General Command`,
                   "value": `\n\`/kostik\` - (Under development) - Coming soon! This command will allow users to move between two channels up to 20 times.\n\n\`/clear\` - With this command, you can clear the recent messages within the last 14 days. You can specify the number of messages you want to delete.\n\n\`/upom\` - This command mentions the user 10 times.\n\n\`/ping\` - Use this command to check the latency.\n\n\`/emoji\` - This command allows you to get a random emoji from the server.`,
                   // "inline": true
+                },
+                {
+                  "name": `Other Commands`,
+                  "value": `[hehehe](https://youtube.com/watch?v=dQw4w9WgXcQ)`
                 }
               ],
               "image": {

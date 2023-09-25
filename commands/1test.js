@@ -1,9 +1,5 @@
 const { SlashCommandBuilder,EmbedBuilder } = require('discord.js');
 
-const mongoose = require('mongoose');
-
-const coins = require('../scripts/mongodb/coins');
-const buildsSchem = require('../scripts/mongodb/builds');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -21,7 +17,10 @@ module.exports = {
 
 		//   await interaction.reply({embeds: [embed], ephemeral: true});
 		// await interaction.reply(`imya 1 ${interaction.member.displayName} imya2 ${interaction.user.tag}`); 
-		await interaction.reply(`empty.`); 
+		
+		// console.log(interaction.user.username)
+
+		await interaction.reply(`[hehehe](https://youtube.com/watch?v=dQw4w9WgXcQ).`); 
 		// console.log(userData.stats[guildId].coins)
 	},
 };
